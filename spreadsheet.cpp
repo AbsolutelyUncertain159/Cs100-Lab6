@@ -7,6 +7,7 @@ using namespace std;
 Spreadsheet::~Spreadsheet()
 {
     delete select;
+
 }
 
 void Spreadsheet::set_selection(Select* new_select)
