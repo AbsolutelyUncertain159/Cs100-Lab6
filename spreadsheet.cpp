@@ -39,6 +39,7 @@ void Spreadsheet::print_selection(std::ostream& out) const
             out << data[i][j] << " ";
         }
         out << endl;
+        delete select;
     }
 }
 

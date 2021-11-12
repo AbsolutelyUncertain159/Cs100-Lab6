@@ -73,9 +73,14 @@ public:
     {
         Selector = ParamSelect;
     }
+     ~Select_Not()
+    {
+        delete Selector;
+    }
     virtual bool select(const Spreadsheet* sheet, int row) const
     {
         return !(Selector->select(sheet, row));
+        delete Selector;
     }
 
 };
@@ -93,9 +98,16 @@ public:
         Selector1 = select1;
         Selector2 = select2;
     }
+     ~Select_And()
+    {
+        delete Selector1;
+        delete Selector2;
+    }
     virtual bool select(const Spreadsheet* sheet, int row) const
     {
         return (Selector1->select(sheet, row) && Selector2->select(sheet, row));
+        delete Selector1;
+        delete Selector2;
     }
 };
 
@@ -112,9 +124,16 @@ public:
         Selector1 = select1;
         Selector2 = select2;
     }
+    ~Select_Or()
+    {
+        delete Selector1;
+        delete Selector2;
+    }
     virtual bool select(const Spreadsheet* sheet, int row) const
     {
         return (Selector1->select(sheet, row) || Selector2->select(sheet, row));
+        delete Selector1;
+        delete Selector2;
     }
 };
 #endif //__SELECT_HPP__
