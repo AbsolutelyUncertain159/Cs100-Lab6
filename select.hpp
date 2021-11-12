@@ -38,4 +38,83 @@ public:
     virtual bool select(const std::string& s) const = 0;
 };
 
+class Select_Contains : public Select_Column
+{
+protected: 
+
+    std::string StringToSearch;
+
+    public:
+        Select_Contains(const Spreadsheet* sheet, const std::string& name, const std::string& TargetString) : Select_Column(sheet, name)
+        {
+            StringToSearch = TargetString;
+        }
+        virtual bool select(const std::string& s) const
+        {
+            if (s.find(StringToSearch) != std::string::npos)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+};
+
+class Select_Not : public Select
+{
+protected:
+
+    Select* Selector;
+
+public:
+    Select_Not(Select* ParamSelect)
+    {
+        Selector = ParamSelect;
+    }
+    virtual bool select(const Spreadsheet* sheet, int row) const
+    {
+        return !(Selector->select(sheet, row));
+    }
+
+};
+
+class Select_And : public Select
+{
+protected:
+
+    Select* Selector1;
+    Select* Selector2;
+
+public:
+    Select_And(Select* select1, Select* select2)
+    {
+        Selector1 = select1;
+        Selector2 = select2;
+    }
+    virtual bool select(const Spreadsheet* sheet, int row) const
+    {
+        return (Selector1->select(sheet, row) && Selector2->select(sheet, row));
+    }
+};
+
+class Select_Or : public Select
+{
+protected:
+
+    Select* Selector1;
+    Select* Selector2;
+
+public:
+    Select_Or(Select* select1, Select* select2)
+    {
+        Selector1 = select1;
+        Selector2 = select2;
+    }
+    virtual bool select(const Spreadsheet* sheet, int row) const
+    {
+        return (Selector1->select(sheet, row) || Selector2->select(sheet, row));
+    }
+};
 #endif //__SELECT_HPP__
